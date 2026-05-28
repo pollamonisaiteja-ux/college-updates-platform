@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>VIT-AP Campus Connect</title>
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-brand">
+      <span class="brand-dot"></span>
+      <span class="brand-text">CampusConnect</span>
+    </div>
+    <div class="nav-links">
+      <a href="#feed" class="nav-link">Feed</a>
+      <a href="pages/lost-found.html" class="nav-link">Lost &amp; Found</a>
+      <a href="pages/issues.html" class="nav-link">Issues</a>
+      <a href="pages/login.html" class="nav-btn-outline">Login</a>
+      <a href="pages/signup.html" class="nav-btn">Join</a>
+    </div>
+    <button class="hamburger" id="hamburger" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- MOBILE MENU -->
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="#feed">Feed</a>
+    <a href="pages/lost-found.html">Lost &amp; Found</a>
+    <a href="pages/issues.html">Issues</a>
+    <a href="pages/login.html">Login</a>
+    <a href="pages/signup.html">Join Now</a>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg-grid"></div>
+    <div class="hero-content">
+      <div class="hero-badge">🎓 VIT-AP University</div>
+      <h1 class="hero-title">
+        Your Campus,<br/>
+        <span class="hero-highlight">Connected.</span>
+      </h1>
+      <p class="hero-sub">
+        One platform for updates, lost &amp; found, issues, and everything campus life throws at you.
+      </p>
+      <div class="hero-actions">
+        <a href="pages/signup.html" class="btn-primary">Get Started Free</a>
+        <a href="#feed" class="btn-ghost">Browse Feed ↓</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat"><span class="stat-num" data-target="1200">0</span><span class="stat-label">Students</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num" data-target="340">0</span><span class="stat-label">Posts Today</span></div>
+        <div class="stat-divider"></div>
+        <div class="stat"><span class="stat-num" data-target="87">0</span><span class="stat-label">Issues Resolved</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="card-float card-float-1">
+        <div class="cf-icon">📢</div>
+        <div class="cf-text">
+          <strong>Exam Notice</strong>
+          <span>Mid-sem starts Nov 12</span>
+        </div>
+      </div>
+      <div class="card-float card-float-2">
+        <div class="cf-icon">🔍</div>
+        <div class="cf-text">
+          <strong>Lost: Blue Water Bottle</strong>
+          <span>Block B Library</span>
+        </div>
+      </div>
+      <div class="card-float card-float-3">
+        <div class="cf-icon">⚡</div>
+        <div class="cf-text">
+          <strong>WiFi Issue Fixed</strong>
+          <span>Hostel A — Resolved</span>
+        </div>
+      </div>
+      <div class="hero-phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen">
+          <div class="phone-header">
+            <span>CampusConnect</span>
+            <span class="phone-dot"></span>
+          </div>
+          <div class="phone-feed">
+            <div class="pf-item">📌 No class — CSE301 today</div>
+            <div class="pf-item">🎉 Hackathon: Nov 15!</div>
+            <div class="pf-item">🔍 Lost: AirPods Pro</div>
+            <div class="pf-item">⚠️ AC broken — Room 204</div>
+            <div class="pf-item">📚 Assignment due Friday</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="features" id="features">
+    <div class="section-label">What you get</div>
+    <h2 class="section-title">Everything campus life needs</h2>
+    <div class="features-grid">
+      <div class="feature-card" data-delay="0">
+        <div class="feature-icon">📢</div>
+        <h3>Daily Updates</h3>
+        <p>Class cancellations, event notices, exam schedules — all in one feed. Never miss what matters.</p>
+        <a href="#feed" class="feature-link">Browse updates →</a>
+      </div>
+      <div class="feature-card featured" data-delay="100">
+        <div class="feature-badge">Most Used</div>
+        <div class="feature-icon">🔍</div>
+        <h3>Lost &amp; Found</h3>
+        <p>Post lost items or report found ones. The campus has honest people — connect with them.</p>
+        <a href="pages/lost-found.html" class="feature-link">View board →</a>
+      </div>
+      <div class="feature-card" data-delay="200">
+        <div class="feature-icon">⚠️</div>
+        <h3>Issue Reporting</h3>
+        <p>WiFi down? AC broken? Hostel complaints? Report issues and track their resolution status.</p>
+        <a href="pages/issues.html" class="feature-link">Report now →</a>
+      </div>
+      <div class="feature-card" data-delay="300">
+        <div class="feature-icon">🔒</div>
+        <h3>Secure Auth</h3>
+        <p>VIT-AP email verified accounts only. Your campus community stays private and safe.</p>
+        <a href="pages/signup.html" class="feature-link">Join now →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIVE FEED -->
+  <section class="feed-section" id="feed">
+    <div class="feed-header">
+      <div>
+        <div class="section-label">Live</div>
+        <h2 class="section-title">Campus Feed</h2>
+      </div>
+      <div class="feed-filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="update">Updates</button>
+        <button class="filter-btn" data-filter="lost">Lost &amp; Found</button>
+        <button class="filter-btn" data-filter="issue">Issues</button>
+      </div>
+    </div>
+
+    <!-- Post Box -->
+    <div class="post-box" id="postBox">
+      <div class="post-box-avatar">👤</div>
+      <div class="post-box-input" onclick="openPostModal()">
+        What's happening on campus?
+      </div>
+      <button class="post-box-btn" onclick="openPostModal()">Post</button>
+    </div>
+
+    <!-- Feed Items -->
+    <div class="feed-grid" id="feedGrid">
+      <!-- Populated by JS -->
+    </div>
+
+    <div class="feed-load-more">
+      <button class="btn-load" id="loadMoreBtn">Load more posts</button>
+    </div>
+  </section>
+
+  <!-- POST MODAL -->
+  <div class="modal-overlay" id="postModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h3>Create Post</h3>
+        <button class="modal-close" onclick="closePostModal()">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="modal-type-select">
+          <button class="type-btn active" data-type="update">📢 Update</button>
+          <button class="type-btn" data-type="lost">🔍 Lost &amp; Found</button>
+          <button class="type-btn" data-type="issue">⚠️ Issue</button>
+        </div>
+        <textarea class="modal-textarea" id="postContent" placeholder="Share with your campus..."></textarea>
+        <div class="modal-footer">
+          <span class="modal-char-count"><span id="charCount">0</span>/280</span>
+          <button class="btn-primary" onclick="submitPost()">Publish Post</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <footer class="footer">
+    <div class="footer-brand">
+      <span class="brand-dot"></span>CampusConnect
+    </div>
+    <p class="footer-sub">Built for VIT-AP students, by student developer.</p>
+    <div class="footer-links">
+      <a href="pages/login.html">Login</a>
+      <a href="pages/signup.html">Sign Up</a>
+      <a href="pages/lost-found.html">Lost &amp; Found</a>
+      <a href="pages/issues.html">Issues</a>
+    </div>
+    <p class="footer-copy">© 2026 CampusConnect by PST· VIT-AP University</p>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+</body>
+</html>
