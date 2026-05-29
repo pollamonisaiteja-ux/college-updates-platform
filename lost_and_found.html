@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lost &amp; Found — CampusConnect</title>
+  <link rel="stylesheet" href="../assets/css/main.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <a href="../index.html" class="nav-brand">
+      <span class="brand-dot"></span><span class="brand-text">CampusConnect</span>
+    </a>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-link">Home</a>
+      <a href="issues.html" class="nav-link">Issues</a>
+      <a href="login.html" class="nav-btn-outline">Login</a>
+      <a href="signup.html" class="nav-btn">Join</a>
+    </div>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="page-hero-inner">
+      <div class="page-badge">🔍 Campus Board</div>
+      <h1 class="page-title">Lost &amp; Found</h1>
+      <p class="page-sub">Someone might have what you're looking for — or vice versa. Post it here.</p>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar">
+    <div class="stat-chip">🟡 <span id="openCount">0</span> Open</div>
+    <div class="stat-chip">🔵 <span id="foundCount">0</span> Found</div>
+    <div class="stat-chip">🟢 <span id="resolvedCount">0</span> Resolved</div>
+    <div class="stat-chip">📋 <span id="totalCount">0</span> Total</div>
+  </div>
+
+  <!-- BODY -->
+  <section class="page-body">
+    <div class="page-layout">
+
+      <!-- LIST SIDE -->
+      <div>
+        <div class="list-controls">
+          <input class="search-input" type="text" id="searchInput" placeholder="Search items, locations..." oninput="filterItems()"/>
+          <select class="form-select" id="statusFilter" style="width:140px;" onchange="filterItems()">
+            <option value="all">All Status</option>
+            <option value="open">Open</option>
+            <option value="found">Found</option>
+            <option value="resolved">Resolved</option>
+          </select>
+          <select class="form-select" id="typeFilter" style="width:130px;" onchange="filterItems()">
+            <option value="all">All Types</option>
+            <option value="lost">Lost</option>
+            <option value="found">Found Item</option>
+          </select>
+        </div>
+        <div class="items-list" id="itemsList"></div>
+      </div>
+
+      <!-- SIDEBAR FORM -->
+      <aside>
+        <div class="sidebar-card">
+          <div class="sidebar-title">📝 Post an Item</div>
+          <div class="form-group">
+            <label class="form-label">Type</label>
+            <select class="form-select" id="postType">
+              <option value="lost">🔍 I Lost Something</option>
+              <option value="found">✅ I Found Something</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Item Name</label>
+            <input class="form-input" type="text" id="itemName" placeholder="e.g. Blue Water Bottle"/>
+            <div class="form-error" id="nameErr">Please enter the item name.</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Location</label>
+            <input class="form-input" type="text" id="itemLocation" placeholder="e.g. B-Block Library, 2nd Floor"/>
+            <div class="form-error" id="locErr">Please enter a location.</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea class="form-textarea" id="itemDesc" placeholder="Colour, brand, any identifying features..."></textarea>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Contact (WhatsApp / phone)</label>
+            <input class="form-input" type="text" id="itemContact" placeholder="e.g. 9876543210"/>
+          </div>
+          <button class="sidebar-btn" onclick="submitItem()">Post Item</button>
+        </div>
+
+        <!-- TIPS -->
+        <div class="sidebar-card" style="margin-top:16px; background:rgba(245,166,35,0.05); border-color:rgba(245,166,35,0.2);">
+          <div style="font-size:13px; font-weight:600; color:var(--accent); margin-bottom:10px;">💡 Tips</div>
+          <ul style="font-size:13px; color:var(--text-2); line-height:1.8; padding-left:16px;">
+            <li>Add a photo description for better results</li>
+            <li>Mention the exact date &amp; time you lost it</li>
+            <li>Mark as resolved once you get the item back</li>
+            <li>Check regularly — items get posted throughout the day</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <div class="toast" id="toast"></div>
+
+  <style>
+    .stats-bar {
+      background: var(--bg-2);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 80px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .stat-chip {
+      background: var(--bg-3);
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-2);
+    }
+    @media(max-width:860px){ .stats-bar { padding: 12px 28px; } }
+
+    .contact-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 600;
+      border: 1px solid rgba(245,166,35,0.3);
+      padding: 5px 12px;
+      border-radius: 8px;
+      transition: all 0.2s;
+    }
+    .contact-link:hover { background: rgba(245,166,35,0.1); }
+    .resolve-btn {
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-3);
+      font-size: 12px;
+      padding: 5px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: all 0.2s;
+    }
+    .resolve-btn:hover { border-color: var(--green); color: var(--green); }
+  </style>
+
+  <script>
+    const sampleItems = [
+      { id:1, type:'lost', name:'AirPods Pro (White)', location:'B-Block Cafeteria', desc:'White case with a blue sticker on the lid. Lost around 1 PM. Very important, please help!', contact:'9876543210', status:'open',     author:'Priya N.', time:'1 hr ago' },
+      { id:2, type:'found', name:'Blue Hydro Flask', location:'Library Entrance', desc:'Found a blue Hydro Flask with "Ankit" written on tape near the library door this morning.', contact:'9123456780', status:'found',    author:'Ravi S.', time:'2 hr ago' },
+      { id:3, type:'lost', name:'Student ID Card', location:'Sports Complex', desc:'Reg no: 21BCE7842. Lost near basketball court. Please drop at hostel warden if found.', contact:'9988776655', status:'open',     author:'Meera K.', time:'5 hr ago' },
+      { id:4, type:'lost', name:'Casio Scientific Calculator', location:'Unknown (possibly Exam Hall)', desc:'FX-991ES Plus, has my name scratched on back. Had it during mid-sem, noticed missing after.', contact:'8877665544', status:'resolved', author:'Sam T.', time:'1 day ago' },
+      { id:5, type:'found', name:'Black JBL Earphones', location:'Bus Stop Near Gate 1', desc:'Found wired black JBL earphones in carry case at the main bus stop. Have them with me.', contact:'7766554433', status:'found',    author:'Divya R.', time:'3 hr ago' },
+      { id:6, type:'lost', name:'Laptop Charger (Dell 65W)', location:'CSE Lab Block', desc:'Grey Dell 65W charger. Left it in Lab 204 during the afternoon practical session.', contact:'9900112233', status:'open',     author:'Arjun M.', time:'6 hr ago' },
+    ];
+
+    let userItems = JSON.parse(localStorage.getItem('lnf_items') || '[]');
+    let allItems = [...userItems, ...sampleItems];
+
+    function updateStats() {
+      document.getElementById('openCount').textContent     = allItems.filter(i => i.status === 'open').length;
+      document.getElementById('foundCount').textContent    = allItems.filter(i => i.status === 'found').length;
+      document.getElementById('resolvedCount').textContent = allItems.filter(i => i.status === 'resolved').length;
+      document.getElementById('totalCount').textContent    = allItems.length;
+    }
+
+    function renderItems(items) {
+      const list = document.getElementById('itemsList');
+      if (!items.length) {
+        list.innerHTML = `<div class="empty-state"><div class="empty-icon">🔍</div><h3>No items found</h3><p>Try adjusting your search or filters.</p></div>`;
+        return;
+      }
+      list.innerHTML = items.map((item, i) => `
+        <div class="item-card" style="animation-delay:${i*0.06}s">
+          <div class="item-header">
+            <div>
+              <span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:${item.type==='lost'?'var(--accent)':'var(--blue)'};">
+                ${item.type === 'lost' ? '🔍 Lost' : '✅ Found'}
+              </span>
+              <div class="item-title" style="margin-top:4px;">${item.name}</div>
+            </div>
+            <span class="status-badge status-${item.status}">${item.status}</span>
+          </div>
+          <p class="item-body">${item.desc}</p>
+          <div class="item-meta">
+            <span>📍 ${item.location}</span>
+            <span>👤 ${item.author}</span>
+            <span>🕐 ${item.time}</span>
+          </div>
+          <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap;">
+            ${item.contact ? `<a class="contact-link" href="tel:${item.contact}">📞 ${item.contact}</a>` : ''}
+            ${item.status !== 'resolved' ? `<button class="resolve-btn" onclick="markResolved(${item.id})">✓ Mark Resolved</button>` : ''}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function filterItems() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const status = document.getElementById('statusFilter').value;
+      const type = document.getElementById('typeFilter').value;
+      const filtered = allItems.filter(item => {
+        const matchSearch = !query ||
+          item.name.toLowerCase().includes(query) ||
+          item.location.toLowerCase().includes(query) ||
+          item.desc.toLowerCase().includes(query);
+        const matchStatus = status === 'all' || item.status === status;
+        const matchType = type === 'all' || item.type === type;
+        return matchSearch && matchStatus && matchType;
+      });
+      renderItems(filtered);
+    }
+
+    function markResolved(id) {
+      allItems = allItems.map(i => i.id === id ? { ...i, status: 'resolved' } : i);
+      userItems = userItems.map(i => i.id === id ? { ...i, status: 'resolved' } : i);
+      localStorage.setItem('lnf_items', JSON.stringify(userItems));
+      updateStats();
+      filterItems();
+      showToastLocal('✅ Marked as resolved!');
+    }
+
+    function submitItem() {
+      const name = document.getElementById('itemName').value.trim();
+      const loc  = document.getElementById('itemLocation').value.trim();
+      const desc = document.getElementById('itemDesc').value.trim();
+      const contact = document.getElementById('itemContact').value.trim();
+      const type = document.getElementById('postType').value;
+      let ok = true;
+
+      document.getElementById('nameErr').classList.remove('show');
+      document.getElementById('locErr').classList.remove('show');
+      document.getElementById('itemName').classList.remove('error');
+      document.getElementById('itemLocation').classList.remove('error');
+
+      if (!name) { document.getElementById('nameErr').classList.add('show'); document.getElementById('itemName').classList.add('error'); ok = false; }
+      if (!loc)  { document.getElementById('locErr').classList.add('show');  document.getElementById('itemLocation').classList.add('error'); ok = false; }
+      if (!ok) return;
+
+      const newItem = {
+        id: Date.now(), type, name, location: loc,
+        desc: desc || 'No additional description.',
+        contact, status: type === 'found' ? 'found' : 'open',
+        author: 'You', time: 'Just now',
+      };
+      allItems.unshift(newItem);
+      userItems.unshift(newItem);
+      localStorage.setItem('lnf_items', JSON.stringify(userItems));
+
+      document.getElementById('itemName').value = '';
+      document.getElementById('itemLocation').value = '';
+      document.getElementById('itemDesc').value = '';
+      document.getElementById('itemContact').value = '';
+
+      updateStats();
+      filterItems();
+      showToastLocal('✅ Item posted to the board!');
+    }
+
+    function showToastLocal(msg, type = 'success') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.borderColor = type === 'error' ? 'var(--red)' : 'var(--green)';
+      t.style.color = type === 'error' ? 'var(--red)' : 'var(--green)';
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    // Navbar scroll
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar')?.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    updateStats();
+    renderItems(allItems);
+  </script>
+</body>
+</html>
