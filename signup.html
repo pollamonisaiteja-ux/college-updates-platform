@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sign Up — CampusConnect</title>
+  <link rel="stylesheet" href="../assets/css/main.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="../index.html" class="nav-brand">
+      <span class="brand-dot"></span>
+      <span class="brand-text">CampusConnect</span>
+    </a>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-link">← Home</a>
+      <a href="login.html" class="nav-btn-outline">Login</a>
+    </div>
+  </nav>
+
+  <main class="auth-page">
+    <div class="auth-card" style="max-width:480px;">
+      <a href="../index.html" class="auth-logo">
+        <span class="brand-dot"></span>
+        CampusConnect
+      </a>
+
+      <h1 class="auth-title">Join your campus 🚀</h1>
+      <p class="auth-sub">Create your VIT-AP student account in seconds.</p>
+
+      <!-- Step Indicator -->
+      <div class="steps" id="steps">
+        <div class="step active" data-step="1">1</div>
+        <div class="step-line"></div>
+        <div class="step" data-step="2">2</div>
+        <div class="step-line"></div>
+        <div class="step" data-step="3">✓</div>
+      </div>
+
+      <!-- Step 1 -->
+      <div class="step-content" id="step1">
+        <div class="form-group">
+          <label class="form-label" for="fullName">Full Name</label>
+          <input class="form-input" type="text" id="fullName" placeholder="e.g. Rahul Sharma" autocomplete="name"/>
+          <div class="form-error" id="nameError">Please enter your full name.</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="regNo">Registration Number</label>
+          <input class="form-input" type="text" id="regNo" placeholder="e.g. 21BCE7777" autocomplete="off"/>
+          <div class="form-error" id="regError">Enter your VIT-AP registration number.</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="branch">Branch / Department</label>
+          <select class="form-select" id="branch">
+            <option value="">Select your branch</option>
+            <option>CSE</option>
+            <option>CSE (AI &amp; ML)</option>
+            <option>CSE (Data Science)</option>
+            <option>ECE</option>
+            <option>EEE</option>
+            <option>ME</option>
+            <option>Civil</option>
+            <option>IT</option>
+            <option>MCA</option>
+            <option>MBA</option>
+          </select>
+          <div class="form-error" id="branchError">Please select your branch.</div>
+        </div>
+        <button class="form-btn" onclick="nextStep(1)">Continue →</button>
+      </div>
+
+      <!-- Step 2 -->
+      <div class="step-content hidden" id="step2">
+        <div class="form-group">
+          <label class="form-label" for="email">VIT-AP Email</label>
+          <input class="form-input" type="email" id="email" placeholder="yourname@vitap.ac.in" autocomplete="email"/>
+          <div class="form-error" id="emailError">Use your @vitap.ac.in email address.</div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="password">Password</label>
+          <div class="password-wrapper">
+            <input class="form-input" type="password" id="password" placeholder="Min 8 characters" autocomplete="new-password"/>
+            <button class="password-toggle" type="button" onclick="togglePwd('password', this)">👁</button>
+          </div>
+          <div class="form-error" id="passwordError">Password must be at least 8 characters.</div>
+          <div class="password-strength" id="pwStrength" style="margin-top:8px;display:none;">
+            <div class="strength-bar"><div class="strength-fill" id="strengthFill"></div></div>
+            <span class="strength-label" id="strengthLabel"></span>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="confirmPassword">Confirm Password</label>
+          <div class="password-wrapper">
+            <input class="form-input" type="password" id="confirmPassword" placeholder="Re-enter password" autocomplete="new-password"/>
+            <button class="password-toggle" type="button" onclick="togglePwd('confirmPassword', this)">👁</button>
+          </div>
+          <div class="form-error" id="confirmError">Passwords do not match.</div>
+        </div>
+        <div style="display:flex; gap:10px;">
+          <button class="form-btn" style="background:var(--bg-3);color:var(--text);border:1px solid var(--border-2);font-family:var(--font-body);" onclick="prevStep(2)">← Back</button>
+          <button class="form-btn" onclick="nextStep(2)">Create Account →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Success -->
+      <div class="step-content hidden" id="step3" style="text-align:center; padding:20px 0;">
+        <div style="font-size:56px; margin-bottom:16px;">🎉</div>
+        <h2 style="font-family:var(--font-head); font-size:24px; margin-bottom:8px;">You're in!</h2>
+        <p style="color:var(--text-2); font-size:15px; margin-bottom:24px;">
+          Welcome to CampusConnect. Your account is ready.
+        </p>
+        <a href="../index.html" class="btn-primary" style="text-decoration:none; display:inline-flex;">
+          Go to Campus Feed →
+        </a>
+        <p style="margin-top:20px; font-size:13px; color:var(--text-3);">
+          Check <span id="confirmEmail"></span> for a verification email.
+        </p>
+      </div>
+
+      <div class="auth-switch" id="loginSwitch">
+        Already have an account? <a href="login.html">Sign in</a>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <style>
+    .steps {
+      display: flex;
+      align-items: center;
+      margin-bottom: 28px;
+      gap: 0;
+    }
+    .step {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--bg-3);
+      border: 2px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: var(--text-3);
+      flex-shrink: 0;
+      transition: all 0.3s;
+    }
+    .step.active { background: var(--accent); border-color: var(--accent); color: #000; }
+    .step.done { background: var(--green); border-color: var(--green); color: #fff; }
+    .step-line { flex: 1; height: 2px; background: var(--border); transition: background 0.3s; }
+    .step-line.done { background: var(--green); }
+    .hidden { display: none; }
+    .password-strength { }
+    .strength-bar { height: 4px; background: var(--bg-3); border-radius: 2px; overflow: hidden; margin-bottom: 4px; }
+    .strength-fill { height: 100%; border-radius: 2px; transition: all 0.3s; }
+    .strength-label { font-size: 12px; color: var(--text-3); }
+  </style>
+
+  <script>
+    let currentStep = 1;
+
+    function togglePwd(id, btn) {
+      const inp = document.getElementById(id);
+      if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
+      else { inp.type = 'password'; btn.textContent = '👁'; }
+    }
+
+    function showToastLocal(msg, type = 'success') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.borderColor = type === 'error' ? 'var(--red)' : 'var(--green)';
+      t.style.color = type === 'error' ? 'var(--red)' : 'var(--green)';
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    function clearErrors() {
+      document.querySelectorAll('.form-error').forEach(e => e.classList.remove('show'));
+      document.querySelectorAll('.form-input').forEach(e => e.classList.remove('error'));
+    }
+
+    function showError(id, inputId) {
+      document.getElementById(id)?.classList.add('show');
+      document.getElementById(inputId)?.classList.add('error');
+    }
+
+    function nextStep(step) {
+      clearErrors();
+      if (step === 1) {
+        const name = document.getElementById('fullName').value.trim();
+        const reg = document.getElementById('regNo').value.trim();
+        const branch = document.getElementById('branch').value;
+        let ok = true;
+        if (name.length < 2) { showError('nameError', 'fullName'); ok = false; }
+        if (reg.length < 6) { showError('regError', 'regNo'); ok = false; }
+        if (!branch) { showError('branchError', 'branch'); ok = false; }
+        if (!ok) return;
+        goToStep(2);
+      } else if (step === 2) {
+        const email = document.getElementById('email').value.trim();
+        const pw = document.getElementById('password').value;
+        const cpw = document.getElementById('confirmPassword').value;
+        let ok = true;
+        if (!email.endsWith('@vitap.ac.in')) { showError('emailError', 'email'); ok = false; }
+        if (pw.length < 8) { showError('passwordError', 'password'); ok = false; }
+        if (pw !== cpw) { showError('confirmError', 'confirmPassword'); ok = false; }
+        if (!ok) return;
+
+        // Simulate registration
+        const emailEl = document.getElementById('confirmEmail');
+        if (emailEl) emailEl.textContent = email;
+
+        localStorage.setItem('campus_user', JSON.stringify({
+          name: document.getElementById('fullName').value.trim(),
+          email,
+          reg: document.getElementById('regNo').value.trim(),
+          branch: document.getElementById('branch').value,
+          loggedIn: true
+        }));
+        goToStep(3);
+      }
+    }
+
+    function prevStep(step) {
+      clearErrors();
+      goToStep(step - 1);
+    }
+
+    function goToStep(n) {
+      document.getElementById(`step${currentStep}`)?.classList.add('hidden');
+      currentStep = n;
+      document.getElementById(`step${n}`)?.classList.remove('hidden');
+
+      // Update step indicators
+      document.querySelectorAll('.step').forEach((el, i) => {
+        const sn = i + 1;
+        el.classList.remove('active', 'done');
+        if (sn < n) el.classList.add('done');
+        else if (sn === n) el.classList.add('active');
+      });
+      document.querySelectorAll('.step-line').forEach((el, i) => {
+        el.classList.toggle('done', i + 1 < n);
+      });
+
+      if (n === 3) {
+        document.getElementById('loginSwitch').style.display = 'none';
+      }
+    }
+
+    // Password strength
+    document.getElementById('password')?.addEventListener('input', function () {
+      const pw = this.value;
+      const bar = document.getElementById('pwStrength');
+      const fill = document.getElementById('strengthFill');
+      const label = document.getElementById('strengthLabel');
+      if (!bar) return;
+
+      bar.style.display = pw.length ? 'block' : 'none';
+      let score = 0;
+      if (pw.length >= 8) score++;
+      if (/[A-Z]/.test(pw)) score++;
+      if (/[0-9]/.test(pw)) score++;
+      if (/[^A-Za-z0-9]/.test(pw)) score++;
+
+      const levels = [
+        { pct: '25%', color: 'var(--red)', text: 'Weak' },
+        { pct: '50%', color: 'var(--accent)', text: 'Fair' },
+        { pct: '75%', color: '#3b82f6', text: 'Good' },
+        { pct: '100%', color: 'var(--green)', text: 'Strong' },
+      ];
+      const l = levels[score - 1] || levels[0];
+      fill.style.width = l.pct;
+      fill.style.background = l.color;
+      label.textContent = l.text;
+      label.style.color = l.color;
+    });
+  </script>
+</body>
+</html>
