@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login — CampusConnect</title>
+  <link rel="stylesheet" href="../assets/css/main.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="navbar">
+    <a href="../index.html" class="nav-brand">
+      <span class="brand-dot"></span>
+      <span class="brand-text">CampusConnect</span>
+    </a>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-link">← Back to Home</a>
+      <a href="signup.html" class="nav-btn">Create Account</a>
+    </div>
+  </nav>
+
+  <main class="auth-page">
+    <div class="auth-card">
+      <a href="../index.html" class="auth-logo">
+        <span class="brand-dot"></span>
+        CampusConnect
+      </a>
+
+      <h1 class="auth-title">Welcome back 👋</h1>
+      <p class="auth-sub">Sign in to your VIT-AP student account.</p>
+
+      <div id="errorBanner" class="error-banner" style="display:none;"></div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">VIT-AP Email</label>
+        <input
+          class="form-input"
+          type="email"
+          id="email"
+          placeholder="yourname@vitap.ac.in"
+          autocomplete="email"
+        />
+        <div class="form-error" id="emailError">Please enter a valid VIT-AP email.</div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <div class="password-wrapper">
+          <input
+            class="form-input"
+            type="password"
+            id="password"
+            placeholder="Enter your password"
+            autocomplete="current-password"
+          />
+          <button class="password-toggle" type="button" onclick="togglePwd('password', this)">👁</button>
+        </div>
+        <div class="form-error" id="passwordError">Password is required.</div>
+      </div>
+
+      <div style="display:flex; justify-content:flex-end; margin-bottom:4px;">
+        <a href="#" style="font-size:13px; color:var(--accent); text-decoration:none;" onclick="showToastLocal('📧 Password reset link sent to your email!')">Forgot password?</a>
+      </div>
+
+      <button class="form-btn" onclick="handleLogin()" id="loginBtn">
+        Sign In
+      </button>
+
+      <div class="auth-divider">or continue with</div>
+
+      <button class="form-btn" style="background:var(--bg-3); color:var(--text); border:1px solid var(--border-2); font-family:var(--font-body); font-weight:500;" onclick="showToastLocal('🔐 Google SSO coming soon!')">
+        🔑 &nbsp;Sign in with Google (VIT-AP SSO)
+      </button>
+
+      <div class="auth-switch">
+        New to CampusConnect? <a href="signup.html">Create account</a>
+      </div>
+    </div>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <style>
+    .error-banner {
+      background: rgba(239,68,68,0.1);
+      border: 1px solid rgba(239,68,68,0.3);
+      color: var(--red);
+      padding: 12px 16px;
+      border-radius: var(--radius);
+      font-size: 14px;
+      margin-bottom: 18px;
+    }
+  </style>
+
+  <script>
+    function togglePwd(id, btn) {
+      const inp = document.getElementById(id);
+      if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
+      else { inp.type = 'password'; btn.textContent = '👁'; }
+    }
+
+    function showToastLocal(msg, type = 'success') {
+      const toast = document.getElementById('toast');
+      toast.textContent = msg;
+      toast.style.borderColor = type === 'error' ? 'var(--red)' : 'var(--green)';
+      toast.style.color = type === 'error' ? 'var(--red)' : 'var(--green)';
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 3000);
+    }
+
+    function validate() {
+      let ok = true;
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const emailErr = document.getElementById('emailError');
+      const passErr = document.getElementById('passwordError');
+      const emailInp = document.getElementById('email');
+      const passInp = document.getElementById('password');
+
+      emailErr.classList.remove('show');
+      passErr.classList.remove('show');
+      emailInp.classList.remove('error');
+      passInp.classList.remove('error');
+
+      if (!email || !email.includes('@')) {
+        emailErr.classList.add('show');
+        emailInp.classList.add('error');
+        ok = false;
+      }
+      if (!password) {
+        passErr.classList.add('show');
+        passInp.classList.add('error');
+        ok = false;
+      }
+      return ok;
+    }
+
+    function handleLogin() {
+      if (!validate()) return;
+
+      const btn = document.getElementById('loginBtn');
+      btn.textContent = 'Signing in...';
+      btn.disabled = true;
+
+      // Simulate API call
+      setTimeout(() => {
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+
+        // Demo: accept any password for demo@vitap.ac.in, or any vitap email
+        if (email.endsWith('@vitap.ac.in') || email === 'demo@vitap.ac.in') {
+          localStorage.setItem('campus_user', JSON.stringify({
+            name: email.split('@')[0].replace('.', ' '),
+            email,
+            loggedIn: true
+          }));
+          showToastLocal('✅ Login successful! Redirecting...');
+          setTimeout(() => window.location.href = '../index.html', 1200);
+        } else {
+          btn.textContent = 'Sign In';
+          btn.disabled = false;
+          document.getElementById('errorBanner').style.display = 'block';
+          document.getElementById('errorBanner').textContent =
+            '❌ Please use your VIT-AP email address (@vitap.ac.in)';
+        }
+      }, 1000);
+    }
+
+    // Allow Enter key
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') handleLogin();
+    });
+  </script>
+</body>
+</html>
