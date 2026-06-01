@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Issue Reports — CampusConnect</title>
+  <link rel="stylesheet" href="../assets/css/main.css"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <nav class="navbar" id="navbar">
+    <a href="../index.html" class="nav-brand">
+      <span class="brand-dot"></span><span class="brand-text">CampusConnect</span>
+    </a>
+    <div class="nav-links">
+      <a href="../index.html" class="nav-link">Home</a>
+      <a href="lost-found.html" class="nav-link">Lost &amp; Found</a>
+      <a href="login.html" class="nav-btn-outline">Login</a>
+      <a href="signup.html" class="nav-btn">Join</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="page-hero">
+    <div class="page-hero-inner">
+      <div class="page-badge">⚠️ Campus Issues</div>
+      <h1 class="page-title">Issue Reports</h1>
+      <p class="page-sub">WiFi down? AC broken? Hostel problem? Report it here and track resolution.</p>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stat-chip" style="border-color:rgba(239,68,68,0.3); color:var(--red);">🔴 <span id="openCount">0</span> Open</div>
+    <div class="stat-chip" style="border-color:rgba(245,166,35,0.3); color:var(--accent);">🟡 <span id="inprogressCount">0</span> In Progress</div>
+    <div class="stat-chip" style="border-color:rgba(34,197,94,0.3); color:var(--green);">🟢 <span id="resolvedCount">0</span> Resolved</div>
+    <div class="stat-chip">📋 <span id="totalCount">0</span> Total</div>
+  </div>
+
+  <!-- BODY -->
+  <section class="page-body">
+    <div class="page-layout">
+
+      <!-- LIST -->
+      <div>
+        <div class="list-controls">
+          <input class="search-input" type="text" id="searchInput" placeholder="Search issues..." oninput="filterIssues()"/>
+          <select class="form-select" id="catFilter" style="width:150px;" onchange="filterIssues()">
+            <option value="all">All Categories</option>
+            <option value="wifi">WiFi / Internet</option>
+            <option value="electrical">Electrical</option>
+            <option value="plumbing">Plumbing</option>
+            <option value="classroom">Classroom</option>
+            <option value="hostel">Hostel</option>
+            <option value="canteen">Canteen</option>
+            <option value="other">Other</option>
+          </select>
+          <select class="form-select" id="statusFilter" style="width:140px;" onchange="filterIssues()">
+            <option value="all">All Status</option>
+            <option value="open">Open</option>
+            <option value="inprogress">In Progress</option>
+            <option value="resolved">Resolved</option>
+          </select>
+        </div>
+        <div class="items-list" id="issuesList"></div>
+      </div>
+
+      <!-- SIDEBAR -->
+      <aside>
+        <div class="sidebar-card">
+          <div class="sidebar-title">⚠️ Report an Issue</div>
+
+          <div class="form-group">
+            <label class="form-label">Category</label>
+            <select class="form-select" id="issueCategory">
+              <option value="wifi">📶 WiFi / Internet</option>
+              <option value="electrical">⚡ Electrical</option>
+              <option value="plumbing">🚰 Plumbing</option>
+              <option value="classroom">🏫 Classroom</option>
+              <option value="hostel">🏠 Hostel</option>
+              <option value="canteen">🍽️ Canteen</option>
+              <option value="other">📌 Other</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Title</label>
+            <input class="form-input" type="text" id="issueTitle" placeholder="e.g. WiFi not working in Hostel A"/>
+            <div class="form-error" id="titleErr">Please enter a title.</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Location</label>
+            <input class="form-input" type="text" id="issueLocation" placeholder="e.g. Hostel A, Floor 3"/>
+            <div class="form-error" id="locErr">Please enter the location.</div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Priority</label>
+            <select class="form-select" id="issuePriority">
+              <option value="low">🟢 Low</option>
+              <option value="medium" selected>🟡 Medium</option>
+              <option value="high">🔴 High / Urgent</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea class="form-textarea" id="issueDesc" placeholder="Describe the issue in detail — when it started, how many affected..."></textarea>
+          </div>
+
+          <button class="sidebar-btn" onclick="submitIssue()">Submit Report</button>
+        </div>
+
+        <!-- ESCALATION INFO -->
+        <div class="sidebar-card" style="margin-top:16px; background:rgba(239,68,68,0.04); border-color:rgba(239,68,68,0.2);">
+          <div style="font-size:13px; font-weight:600; color:var(--red); margin-bottom:10px;">🚨 Urgent Contacts</div>
+          <div style="font-size:13px; color:var(--text-2); line-height:2;">
+            <div>🔧 Maintenance: <strong style="color:var(--text);">Ext. 1234</strong></div>
+            <div>🌐 IT Helpdesk: <strong style="color:var(--text);">Ext. 5678</strong></div>
+            <div>🏠 Hostel Warden: <strong style="color:var(--text);">Ext. 9012</strong></div>
+            <div>🔒 Security: <strong style="color:var(--text);">Ext. 3456</strong></div>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <div class="toast" id="toast"></div>
+
+  <style>
+    .stats-bar { background:var(--bg-2); border-bottom:1px solid var(--border); padding:12px 80px; display:flex; gap:20px; flex-wrap:wrap; }
+    .stat-chip { background:var(--bg-3); border:1px solid var(--border); border-radius:100px; padding:6px 14px; font-size:13px; font-weight:500; color:var(--text-2); }
+
+    .priority-badge { padding:3px 10px; border-radius:100px; font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.05em; }
+    .priority-low    { background:rgba(34,197,94,0.15);  color:var(--green); }
+    .priority-medium { background:rgba(245,166,35,0.15); color:var(--accent); }
+    .priority-high   { background:rgba(239,68,68,0.15);  color:var(--red); }
+
+    .upvote-btn {
+      background:none; border:1px solid var(--border); color:var(--text-3);
+      font-size:12px; padding:5px 14px; border-radius:8px;
+      cursor:pointer; font-family:var(--font-body); transition:all 0.2s;
+      display:flex; align-items:center; gap:5px;
+    }
+    .upvote-btn:hover { border-color:var(--accent); color:var(--accent); }
+    .upvote-btn.upvoted { background:rgba(245,166,35,0.1); border-color:var(--accent); color:var(--accent); font-weight:700; }
+
+    .cat-icon { display:inline-block; margin-right:4px; }
+    @media(max-width:860px){ .stats-bar { padding:12px 28px; } }
+  </style>
+
+  <script>
+    const catMap = {
+      wifi:'📶 WiFi', electrical:'⚡ Electrical', plumbing:'🚰 Plumbing',
+      classroom:'🏫 Classroom', hostel:'🏠 Hostel', canteen:'🍽️ Canteen', other:'📌 Other'
+    };
+
+    const sampleIssues = [
+      { id:1, category:'wifi',       title:'WiFi down — Hostel A, Floors 2–4',          location:'Hostel A, Floors 2–4', desc:'Complete WiFi outage since 10 PM. Multiple students affected. Raised IT ticket #2847 already.', priority:'high',   status:'inprogress', author:'Hostel Block A', time:'1 hr ago',  upvotes:34 },
+      { id:2, category:'electrical', title:'AC not working — ECE Lab 3',                 location:'ECE Lab Block, Lab 3', desc:'AC has been broken for 3 days. Very hot during 2–4 PM sessions. Urgent fix needed.', priority:'high',   status:'open',       author:'ECE Lab Users', time:'5 hr ago',  upvotes:22 },
+      { id:3, category:'classroom',  title:'Projector not working in B-301',             location:'B-Block, Room 301',    desc:'Projector shows no signal. Has been like this since Monday. Classes are being disrupted.', priority:'medium', status:'open',       author:'CSE Students', time:'2 hr ago',  upvotes:15 },
+      { id:4, category:'plumbing',   title:'Water leakage in hostel bathroom',           location:'Boys Hostel, Block C', desc:'Water leaking from ceiling in 3rd floor bathroom. Risk of slipping. Needs immediate repair.', priority:'high',   status:'open',       author:'Arjun M.', time:'3 hr ago',  upvotes:41 },
+      { id:5, category:'canteen',    title:'Cafeteria food quality issue',                location:'Main Cafeteria',       desc:'Food has been of consistently poor quality this week. Multiple students have complained. Request inspection.', priority:'medium', status:'open', author:'Neha K.', time:'1 day ago', upvotes:67 },
+      { id:6, category:'wifi',       title:'Slow internet in Library',                   location:'Central Library',      desc:'Library WiFi is extremely slow during peak hours (11 AM – 2 PM). Download speed under 1 Mbps.', priority:'medium', status:'resolved',   author:'Library Users', time:'2 days ago', upvotes:29 },
+    ];
+
+    let userIssues = JSON.parse(localStorage.getItem('campus_issues') || '[]');
+    let allIssues  = [...userIssues, ...sampleIssues];
+    let upvotedIds = JSON.parse(localStorage.getItem('upvoted_issues') || '[]');
+
+    function updateStats() {
+      document.getElementById('openCount').textContent       = allIssues.filter(i=>i.status==='open').length;
+      document.getElementById('inprogressCount').textContent = allIssues.filter(i=>i.status==='inprogress').length;
+      document.getElementById('resolvedCount').textContent   = allIssues.filter(i=>i.status==='resolved').length;
+      document.getElementById('totalCount').textContent      = allIssues.length;
+    }
+
+    function renderIssues(issues) {
+      const list = document.getElementById('issuesList');
+      if (!issues.length) {
+        list.innerHTML = `<div class="empty-state"><div class="empty-icon">✅</div><h3>No issues found</h3><p>Try adjusting your filters.</p></div>`;
+        return;
+      }
+      list.innerHTML = issues.map((issue, i) => `
+        <div class="item-card" style="animation-delay:${i*0.06}s; border-left:3px solid ${issue.priority==='high'?'var(--red)':issue.priority==='medium'?'var(--accent)':'var(--green)'};">
+          <div class="item-header">
+            <div style="flex:1;">
+              <div style="display:flex; align-items:center; gap:8px; margin-bottom:6px;">
+                <span style="font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:0.07em; color:var(--text-3);">${catMap[issue.category] || issue.category}</span>
+                <span class="priority-badge priority-${issue.priority}">${issue.priority}</span>
+              </div>
+              <div class="item-title">${issue.title}</div>
+            </div>
+            <span class="status-badge status-${issue.status === 'inprogress' ? 'pending' : issue.status}">
+              ${issue.status === 'inprogress' ? 'In Progress' : issue.status}
+            </span>
+          </div>
+          <p class="item-body">${issue.desc}</p>
+          <div class="item-meta">
+            <span>📍 ${issue.location}</span>
+            <span>👤 ${issue.author}</span>
+            <span>🕐 ${issue.time}</span>
+          </div>
+          <div style="margin-top:14px; display:flex; gap:8px; align-items:center;">
+            <button class="upvote-btn ${upvotedIds.includes(issue.id) ? 'upvoted' : ''}"
+              id="upvote-${issue.id}" onclick="toggleUpvote(${issue.id})">
+              👍 <span id="ucount-${issue.id}">${issue.upvotes}</span> Upvote
+            </button>
+            ${issue.status !== 'resolved' ? `<span style="font-size:12px; color:var(--text-3);">Upvote to escalate priority</span>` : '<span style="font-size:12px; color:var(--green);">✓ Issue resolved</span>'}
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function toggleUpvote(id) {
+      const idx = upvotedIds.indexOf(id);
+      const issue = allIssues.find(i => i.id === id);
+      if (!issue) return;
+
+      if (idx === -1) {
+        upvotedIds.push(id);
+        issue.upvotes++;
+      } else {
+        upvotedIds.splice(idx, 1);
+        issue.upvotes--;
+      }
+      localStorage.setItem('upvoted_issues', JSON.stringify(upvotedIds));
+
+      const btn = document.getElementById(`upvote-${id}`);
+      const cnt = document.getElementById(`ucount-${id}`);
+      if (btn) btn.classList.toggle('upvoted', idx === -1);
+      if (cnt) cnt.textContent = issue.upvotes;
+      showToastLocal(idx === -1 ? '👍 Upvoted! This helps prioritise the issue.' : 'Upvote removed.');
+    }
+
+    function filterIssues() {
+      const query  = document.getElementById('searchInput').value.toLowerCase();
+      const cat    = document.getElementById('catFilter').value;
+      const status = document.getElementById('statusFilter').value;
+      const filtered = allIssues.filter(issue => {
+        const matchSearch = !query || issue.title.toLowerCase().includes(query) || issue.desc.toLowerCase().includes(query) || issue.location.toLowerCase().includes(query);
+        const matchCat    = cat === 'all' || issue.category === cat;
+        const matchStatus = status === 'all' || issue.status === status;
+        return matchSearch && matchCat && matchStatus;
+      });
+      renderIssues(filtered);
+    }
+
+    function submitIssue() {
+      const title    = document.getElementById('issueTitle').value.trim();
+      const location = document.getElementById('issueLocation').value.trim();
+      const desc     = document.getElementById('issueDesc').value.trim();
+      const category = document.getElementById('issueCategory').value;
+      const priority = document.getElementById('issuePriority').value;
+      let ok = true;
+
+      document.getElementById('titleErr').classList.remove('show');
+      document.getElementById('locErr').classList.remove('show');
+      document.getElementById('issueTitle').classList.remove('error');
+      document.getElementById('issueLocation').classList.remove('error');
+
+      if (!title)    { document.getElementById('titleErr').classList.add('show'); document.getElementById('issueTitle').classList.add('error'); ok = false; }
+      if (!location) { document.getElementById('locErr').classList.add('show'); document.getElementById('issueLocation').classList.add('error'); ok = false; }
+      if (!ok) return;
+
+      const newIssue = {
+        id: Date.now(), category, title, location,
+        desc: desc || 'No additional description provided.',
+        priority, status: 'open', author: 'You', time: 'Just now', upvotes: 0,
+      };
+      allIssues.unshift(newIssue);
+      userIssues.unshift(newIssue);
+      localStorage.setItem('campus_issues', JSON.stringify(userIssues));
+
+      document.getElementById('issueTitle').value    = '';
+      document.getElementById('issueLocation').value = '';
+      document.getElementById('issueDesc').value     = '';
+
+      updateStats();
+      filterIssues();
+      showToastLocal('✅ Issue reported! Admin will review shortly.');
+    }
+
+    function showToastLocal(msg, type = 'success') {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.borderColor = type === 'error' ? 'var(--red)' : 'var(--green)';
+      t.style.color       = type === 'error' ? 'var(--red)' : 'var(--green)';
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+    }
+
+    window.addEventListener('scroll', () => {
+      document.getElementById('navbar')?.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    updateStats();
+    renderIssues(allIssues);
+  </script>
+</body>
+</html>
