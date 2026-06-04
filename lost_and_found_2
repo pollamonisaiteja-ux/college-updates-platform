@@ -1,0 +1,126 @@
+const express    = require('express');
+const router     = express.Router();
+const LostFound  = require('../models/LostFound');
+const { protect, optionalAuth } = require('../middleware/auth');
+
+/**
+ * GET /api/lost-found
+ * Get all lost & found items (paginated, filtered). Public.
+ */
+router.get('/', optionalAuth, async (req, res, next) => {
+  try {
+    const page   = Math.max(parseInt(req.query.page) || 1, 1);
+    const limit  = Math.min(parseInt(req.query.limit) || 20, 100);
+    const skip   = (page - 1) * limit;
+    const type   = req.query.type;   // 'lost' | 'found'
+    const status = req.query.status; // 'open' | 'found' | 'resolved'
+    const search = req.query.search;
+
+    const query = {};
+    if (type   && ['lost','found'].includes(type))               query.type   = type;
+    if (status && ['open','found','resolved'].includes(status))  query.status = status;
+    if (search) {
+      query.$or = [
+        { itemName:    { $regex: search, $options: 'i' } },
+        { description: { $regex: search, $options: 'i' } },
+        { location:    { $regex: search, $options: 'i' } },
+      ];
+    }
+
+    const [items, total] = await Promise.all([
+      LostFound.find(query)
+        .populate('author', 'name branch')
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(limit),
+      LostFound.countDocuments(query),
+    ]);
+
+    res.json({
+      success: true,
+      data: items,
+      pagination: { total, page, pages: Math.ceil(total / limit) },
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * POST /api/lost-found
+ * Create a lost/found report. Requires auth.
+ */
+router.post('/', protect, async (req, res, next) => {
+  try {
+    const { type, itemName, description, location, contact, dateOccurred } = req.body;
+
+    if (!itemName?.trim() || !location?.trim()) {
+      return res.status(400).json({ success: false, message: 'Item name and location are required.' });
+    }
+    if (!['lost', 'found'].includes(type)) {
+      return res.status(400).json({ success: false, message: "Type must be 'lost' or 'found'." });
+    }
+
+    const item = await LostFound.create({
+      author: req.user._id,
+      type, itemName, description, location, contact, dateOccurred,
+    });
+
+    const populated = await item.populate('author', 'name branch');
+    res.status(201).json({ success: true, data: populated });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * PATCH /api/lost-found/:id/status
+ * Update status of own item. Owner or admin only.
+ */
+router.patch('/:id/status', protect, async (req, res, next) => {
+  try {
+    const { status } = req.body;
+    if (!['open', 'found', 'resolved'].includes(status)) {
+      return res.status(400).json({ success: false, message: 'Invalid status value.' });
+    }
+
+    const item = await LostFound.findById(req.params.id);
+    if (!item) return res.status(404).json({ success: false, message: 'Item not found.' });
+
+    const isOwner = item.author.toString() === req.user._id.toString();
+    const isAdmin = ['admin', 'moderator'].includes(req.user.role);
+    if (!isOwner && !isAdmin) {
+      return res.status(403).json({ success: false, message: 'Not authorised.' });
+    }
+
+    item.status = status;
+    await item.save();
+    res.json({ success: true, data: item });
+  } catch (err) {
+    next(err);
+  }
+});
+
+/**
+ * DELETE /api/lost-found/:id
+ * Delete own item or admin.
+ */
+router.delete('/:id', protect, async (req, res, next) => {
+  try {
+    const item = await LostFound.findById(req.params.id);
+    if (!item) return res.status(404).json({ success: false, message: 'Item not found.' });
+
+    const isOwner = item.author.toString() === req.user._id.toString();
+    const isAdmin = ['admin', 'moderator'].includes(req.user.role);
+    if (!isOwner && !isAdmin) {
+      return res.status(403).json({ success: false, message: 'Not authorised.' });
+    }
+
+    await item.deleteOne();
+    res.json({ success: true, message: 'Item removed.' });
+  } catch (err) {
+    next(err);
+  }
+});
+
+module.exports = router;
