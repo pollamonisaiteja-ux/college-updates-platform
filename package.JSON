@@ -1,0 +1,35 @@
+{
+  "name": "campus-connect",
+  "version": "1.0.0",
+  "description": "A campus community platform for VIT-AP students — updates, lost & found, and issue reporting.",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "nodemon backend/server.js",
+    "test": "echo \"Tests coming in v2\" && exit 0"
+  },
+  "keywords": [
+    "campus",
+    "community",
+    "vitap",
+    "students",
+    "lost-found",
+    "issue-tracker"
+  ],
+  "author": "VIT-AP Students",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
