@@ -1,0 +1,3 @@
+const test=require('node:test');const assert=require('node:assert/strict');
+test('node test runner is available',()=>assert.equal(typeof test,'function'));
+test('JWT secret policy rejects missing and short secrets',()=>{const old=process.env.JWT_SECRET;try{delete process.env.JWT_SECRET;assert.throws(()=>require('../backend/middleware/auth').jwtSecret(),/at least 32 characters/);process.env.JWT_SECRET='short';assert.throws(()=>require('../backend/middleware/auth').jwtSecret(),/at least 32 characters/);process.env.JWT_SECRET='a-valid-test-secret-with-more-than-32-characters';assert.equal(require('../backend/middleware/auth').jwtSecret(),process.env.JWT_SECRET);}finally{if(old===undefined)delete process.env.JWT_SECRET;else process.env.JWT_SECRET=old;}});

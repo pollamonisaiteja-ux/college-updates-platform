@@ -1,0 +1,5 @@
+const mongoose=require('mongoose');
+const schema=new mongoose.Schema({author:{type:mongoose.Schema.Types.ObjectId,ref:'User',required:true},category:{type:String,enum:['wifi','electrical','plumbing','classroom','hostel','canteen','other'],default:'other'},title:{type:String,required:true,trim:true,maxlength:150},description:{type:String,trim:true,maxlength:800,default:''},location:{type:String,required:true,trim:true,maxlength:150},priority:{type:String,enum:['low','medium','high'],default:'medium'},status:{type:String,enum:['open','inprogress','resolved'],default:'open'},upvotes:[{type:mongoose.Schema.Types.ObjectId,ref:'User'}],adminNote:{type:String,trim:true,maxlength:300,default:''},resolvedAt:Date},{timestamps:true,toJSON:{virtuals:true}});
+schema.virtual('upvoteCount').get(function(){return this.upvotes.length;});
+schema.pre('save',function(){if(this.isModified('status')&&this.status==='resolved'&&!this.resolvedAt)this.resolvedAt=new Date();});
+module.exports=mongoose.model('Issue',schema);

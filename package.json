@@ -1,0 +1,13 @@
+{
+  "name": "campus-connect",
+  "version": "1.1.0",
+  "private": true,
+  "description": "A student-built campus community platform prototype for updates, lost and found, and issue reporting.",
+  "main": "backend/server.js",
+  "scripts": { "start": "node backend/server.js", "dev": "nodemon backend/server.js", "test": "node --test" },
+  "keywords": ["campus", "community", "vitap", "students", "lost-found", "issue-tracker"],
+  "license": "MIT",
+  "engines": { "node": ">=18.0.0" },
+  "dependencies": { "bcryptjs": "^2.4.3", "cors": "^2.8.5", "dotenv": "^16.3.1", "express": "^4.18.2", "jsonwebtoken": "^9.0.2", "mongoose": "^8.0.3" },
+  "devDependencies": { "nodemon": "^3.0.2" }
+}
