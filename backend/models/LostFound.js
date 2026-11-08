@@ -1,0 +1,3 @@
+const mongoose=require('mongoose');
+const schema=new mongoose.Schema({author:{type:mongoose.Schema.Types.ObjectId,ref:'User',required:true},type:{type:String,enum:['lost','found'],required:true},itemName:{type:String,required:true,trim:true,maxlength:100},description:{type:String,trim:true,maxlength:500,default:''},location:{type:String,required:true,trim:true,maxlength:150},contact:{type:String,trim:true,maxlength:100},status:{type:String,enum:['open','found','resolved'],default:'open'},dateOccurred:{type:Date,default:Date.now}},{timestamps:true});
+module.exports=mongoose.model('LostFound',schema);
